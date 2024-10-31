@@ -1,4 +1,3 @@
-// NotificationSetup.js
 import React, { useEffect } from 'react';
 
 function NotificationSetup() {
