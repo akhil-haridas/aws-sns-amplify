@@ -1,34 +1,32 @@
-import { PushNotification } from "@aws-amplify/pushnotification";
-import axios from "axios";
+// NotificationSetup.js
+import React, { useEffect } from 'react';
 
-const NotificationService = {
-    setupNotificationListener: () => {
-        PushNotification.onNotification((notification) => {
-            console.log("Notification received:", notification);
-            // Here you can handle what happens when a notification is received
-        });
-
-        PushNotification.onNotificationOpened((notification) => {
-            console.log("Notification opened:", notification);
-            // Handle notification click
-        });
-    },
-
-    sendTestNotification: async () => {
-        try {
-            // Replace this URL with your backend API endpoint that sends notifications
-            const response = await axios.post(
-                "https://your-api-url/send-notification",
-                {
-                    title: "Test Notification",
-                    body: "This is a test notification from AWS Amplify!",
-                }
-            );
-            console.log("Notification sent:", response.data);
-        } catch (error) {
-            console.error("Error sending notification:", error);
+function NotificationSetup() {
+    useEffect(() => {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                    console.log('Service Worker registered');
+                    return registration.pushManager.subscribe({
+                        userVisibleOnly: true,
+                        applicationServerKey: '<YOUR_PUBLIC_VAPID_KEY>',
+                    });
+                })
+                .then((subscription) => {
+                    // Register subscription with the backend
+                    fetch('http://localhost:4000/subscribe', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ endpoint: subscription.endpoint }),
+                    });
+                })
+                .catch(console.error);
         }
-    },
-};
+    }, []);
 
-export default NotificationService;
+    return <div>Notifications are ready!</div>;
+}
+
+export default NotificationSetup;
