@@ -4,9 +4,8 @@ import NotificationSetup from "./NotificationService";
 function App() {
   return (
     <div className="App">
-      <NotificationSetup/>
-      <h1>AWS Amplify Push Notifications</h1>
-      <button>Send Test Notification</button>
+      <h1>AWS SNS Notification Demo</h1>
+      <NotificationSetup />
     </div>
   );
 }
