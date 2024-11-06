@@ -1,21 +1,12 @@
-// self.addEventListener("push", function (event) {
-//     const data = event.data.json();
-//     const options = {
-//         body: data.body,
-//         icon: "/icon.png",
-//         vibrate: [100, 50, 100],
-//         data: {
-//             dateOfArrival: Date.now(),
-//             primaryKey: "2",
-//         },
-//     };
-//     event.waitUntil(self.registration.showNotification(data.title, options));
-// });
-
 self.addEventListener('push', (event) => {
-    const data = event.data.json();
-    self.registration.showNotification(data.title, {
-        body: data.body,
-        icon: '/icon.png',
-    });
+    console.log("heyeyeyyeyye")
+    const { title, body, icon } = event.data.json();
+    const options = {
+        body: body,
+        icon: icon,
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(title, options)
+    );
 });
